@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: acaes <acaes@student.s19.be>               +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 15:39:41 by acaes             #+#    #+#             */
-/*   Updated: 2024/11/09 17:13:21 by acaes            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 int	ft_strlen(char *s)
 {
 	int	i;
@@ -19,7 +7,7 @@ int	ft_strlen(char *s)
 	return (i);
 }
 
-char	*ft_strchr(const char *s, int a)
+char	*ft_strrchr(const char *s, int a)
 {
 	char	c;
 	int		i;
@@ -29,7 +17,7 @@ char	*ft_strchr(const char *s, int a)
 	while (s[i])
 	{
 		if (s[i] == c)
-			return ((char *)&s[i]);
+			return ((chqr *)&s[i]);
 		return (NULL);
 	}
 }
