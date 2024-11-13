@@ -39,7 +39,7 @@ char	*set_line(char *stash)
 
 char	*fill_line(int fd, char *stash)
 {
-	char	buffer[BUFFER_SIZE];
+	char	buffer[BUFFER_SIZE + 1];
 	ssize_t	byte_read;
 	char	*left;
 
@@ -51,7 +51,8 @@ char	*fill_line(int fd, char *stash)
 		if (byte_read == 0)
 			break ;
 		buffer[byte_read] = '\0';
-		stash = ft_strjoin(left, buffer);
+		left = stash;
+		stash = ft_strjoin(stash, buffer);
 		free(left);
 		if (!stash)
 			return (NULL);
@@ -63,14 +64,38 @@ char	*get_next_line(int fd)
 {
 	static char	*stash;
 	char		*line;
+	char		*left;
 
 	stash = NULL;
-	if (fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0) 
 		return (NULL);
 	stash = fill_line(fd, stash);
 	if (!stash)
 		return (NULL);
 	line = set_line(stash);
+	if (!line)
+		return (NULL);
+	left = stash;
 	stash = ft_strdup(stash + ft_strlen(line));
+	free(left);
 	return (line);
+}
+
+int	main()
+{
+	int		fd = open("test.txt", O_RDONLY);
+	char	*line;
+
+	if (fd == -1)
+	{
+		perror("opening file failed");
+		return (-1);
+	}
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s", line);
+		free(line);
+	}
+	close (fd);
+	return (0);
 }

@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strrchr(const char *s, int a)
+char	*ft_strchr(const char *s, int a)
 {
 	char	c;
 	int		i;
@@ -79,7 +79,7 @@ char	*ft_substr(const char *s, unsigned int start, size_t l)
 	i = 0;
 	while (i < l)
 	{
-		str[i] = s[start + 1];
+		str[i] = s[start + i];
 		i++;
 	}
 	str[i] = '\0';
