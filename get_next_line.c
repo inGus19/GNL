@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fctnl.h>
-#include <unistd.h>
+#include "get_next_line.h"
+#include <stdio.h>
 
 #define BUFFER_SIZE 10
 
@@ -68,7 +68,7 @@ char	*get_next_line(int fd)
 	if (fd < 0)
 		return (NULL);
 	stash = fill_line(fd, stash);
-	if (!stach)
+	if (!stash)
 		return (NULL);
 	line = set_line(stash);
 	stash = ft_strdup(stash + ft_strlen(line));

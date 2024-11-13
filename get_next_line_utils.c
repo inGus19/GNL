@@ -10,10 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_strlen(char *s)
-{
-	int	i;
+#include "get_next_line.h"
 
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
 	while (s[i])
 		i++;
 	return (i);
@@ -29,9 +32,12 @@ char	*ft_strrchr(const char *s, int a)
 	while (s[i])
 	{
 		if (s[i] == c)
-			return ((chqr *)&s[i]);
-		return (NULL);
+			return ((char *)&s[i]);
+		i++;
 	}
+	if (c == '\0')
+		return ((char *)&s[i]);
+	return (NULL);
 }
 
 char	*ft_strdup(const char *s)
@@ -46,6 +52,7 @@ char	*ft_strdup(const char *s)
 	dst = (char *)malloc(sizeof(char) * l + 1);
 	if (!dst)
 		return (NULL);
+	i = 0;
 	while (s[i])
 	{
 		dst[i] = s[i];
@@ -79,7 +86,7 @@ char	*ft_substr(const char *s, unsigned int start, size_t l)
 	return (str);
 }
 
-char	ft_strjoin(const char *s1, const char *s2)
+char	*ft_strjoin(const char *s1, const char *s2)
 {
 	char	*str;
 	int		i;
