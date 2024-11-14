@@ -9,70 +9,56 @@
 /*   Updated: 2024/11/12 21:19:30 by acaes            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "get_next_line.h"
 #include <stdio.h>
 
-// Fonction pour extraire une ligne de `stash` jusqu'au premier '\n' inclus
-char	*set_line(char *stash)
-{
-	char	*line;
-	char	*left;
-	ssize_t	l;
-
-	if (!stash || *stash == '\0')
-		return (NULL);
-	l = 0;
-	while (stash[l] && stash[l] != '\n')
-		l++;
-	if (stash[l] == '\n')
-		l++;
-	line = ft_substr(stash, 0, l);
-	if (!line)
-		return (NULL);
-	left = stash;
-	stash = ft_strdup(stash + l);
-	free(left);
-	return (line);
-}
-
-// Fonction pour remplir `stash` en lisant le fichier jusqu'à rencontrer un '\n'
-char	*fill_line(int fd, char *stash)
+char	*fill_line(int fd, char *left)
 {
 	char	buffer[BUFFER_SIZE + 1];
-	ssize_t	byte_read;
-	char	*left;
+	ssize_t	b_read;
+	char	*temp;
 
-	if (!stash)
+	if (!left)
+		left = ft_strdup("");
+	while (!ft_strchr(left, '\n'))
 	{
-		stash = ft_strdup("");
-		if (!stash)
+		b_read = read(fd, buffer, BUFFER_SIZE);
+		if (b_read == -1)
 			return (NULL);
-	}
-	while (!ft_strchr(stash, '\n'))
-	{
-		byte_read = read(fd, buffer, BUFFER_SIZE);
-		if (byte_read == -1)
-			return (NULL);
-		if (byte_read == 0)
+		if (b_read == 0)
 			break ;
-		buffer[byte_read] = '\0';
-		left = stash;
-		stash = ft_strjoin(stash, buffer);
-		if (!stash)
-		{
-			free(left);
+		buffer[b_read] = '\0';
+		temp = left;
+		left = ft_strjoin(left, buffer);
+		free(temp);
+		if (!left)
 			return (NULL);
-		}
-		free(left);
 	}
-	return (stash);
+	return (left);
 }
 
-// Fonction principale `get_next_line`
+char	*set_line(char *line)
+{
+	char	*extracted_line;
+	ssize_t	l;
+
+	if (!line || *line == '\0')
+		return (NULL);
+	l = 0;
+	while (line[l] && line[l] != '\n')
+		l++;
+	if (line[l] == '\n')
+		l++;
+	extracted_line = ft_substr(line, 0, l);
+	return (extracted_line);
+}
+
 char	*get_next_line(int fd)
 {
 	static char	*stash = NULL;
 	char		*line;
+	char		*tmp;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -82,10 +68,13 @@ char	*get_next_line(int fd)
 	line = set_line(stash);
 	if (!line)
 		return (NULL);
+	tmp = stash;
+	stash = ft_strdup(stash + ft_strlen(line));
+	free(tmp);
 	return (line);
 }
-
-/*int	main(void)
+/*
+int	main(void)
 {
 	int		fd;
 	char	*line;
