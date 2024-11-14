@@ -14,12 +14,12 @@
 
 size_t	ft_strlen(const char *s)
 {
-	size_t	i;
+	size_t	l;
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	l = 0;
+	while (s[l])
+		l++;
+	return (l);
 }
 
 char	*ft_strchr(const char *s, int a)
@@ -42,23 +42,21 @@ char	*ft_strchr(const char *s, int a)
 
 char	*ft_strdup(const char *s)
 {
-	size_t	i;
 	size_t	l;
+	size_t	i;
 	char	*dst;
 
-	if (!s)
-		return (NULL);
 	l = ft_strlen(s);
-	dst = (char *)malloc(sizeof(char) * l + 1);
+	dst = (char *)malloc(sizeof(char) * (l + 1));
 	if (!dst)
 		return (NULL);
 	i = 0;
-	while (s[i])
+	while (i < l)
 	{
 		dst[i] = s[i];
 		i++;
 	}
-	dst[l] = '\0';
+	dst[i] = '\0';
 	return (dst);
 }
 
