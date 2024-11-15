@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*fill_line(int fd, char *left)
 {
@@ -21,19 +20,27 @@ char	*fill_line(int fd, char *left)
 
 	if (!left)
 		left = ft_strdup("");
+	if (!left)
+		return (NULL);
 	while (!ft_strchr(left, '\n'))
 	{
 		b_read = read(fd, buffer, BUFFER_SIZE);
 		if (b_read == -1)
+		{
+			free(left);
 			return (NULL);
+		}
 		if (b_read == 0)
 			break ;
 		buffer[b_read] = '\0';
-		temp = left;
-		left = ft_strjoin(left, buffer);
-		free(temp);
-		if (!left)
+		temp = ft_strjoin(left, buffer);
+		if (!temp)
+		{
+			free(left);
 			return (NULL);
+		}
+		free(left);
+		left = temp;
 	}
 	return (left);
 }
@@ -63,17 +70,28 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	stash = fill_line(fd, stash);
-	if (!stash || *stash == '\0')
+	if (!stash)
 		return (NULL);
 	line = set_line(stash);
 	if (!line)
+	{
+		free(stash);
+		stash = NULL;
 		return (NULL);
+	}
 	tmp = stash;
 	stash = ft_strdup(stash + ft_strlen(line));
 	free(tmp);
+	if (!stash)
+	{
+		free(line);
+		return (NULL);
+	}
 	return (line);
 }
-/*
+
+#include "stdio.h"
+
 int	main(void)
 {
 	int		fd;
@@ -92,4 +110,4 @@ int	main(void)
 	}
 	close(fd);
 	return (0);
-}*/
+}

@@ -6,7 +6,7 @@
 # include <unistd.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 8
 # endif
 
 size_t		ft_strlen(const char *s);
