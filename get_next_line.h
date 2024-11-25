@@ -23,12 +23,12 @@
 #  define BUFFER_SIZE 10
 # endif
 
-char		*init_left(char *left);
 size_t		ft_strlen(const char *s);
 char		*ft_strchr(const char *s, int a);
 char		*ft_strdup(const char *s);
 char		*ft_substr(const char *s, unsigned int start, size_t l);
 char		*ft_strjoin(const char *s1, const char *s2);
+char		*ft_free(char **ptr);
 char		*fill_line(int fd, char *left);
 char		*set_line(char *line);
 char		*get_next_line(int fd);

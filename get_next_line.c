@@ -12,48 +12,41 @@
 
 #include "get_next_line.h"
 
-char	*init_left(char *left)
+char	*ft_free(char **ptr)
 {
-	if (!left)
-		left = ft_strdup("");
-	return (left);
+	if (ptr && *ptr)
+	{
+		free(*ptr);
+		*ptr = NULL;
+	}
+	return (NULL);
 }
 
-char	*read_contact(int fd, char *left)
+char	*fill_line(int fd, char *left)
 {
 	char	buffer[BUFFER_SIZE + 1];
 	ssize_t	b_read;
 	char	*temp;
 
+	if (!left)
+		left = ft_strdup("");
+	if (!left)
+		return (NULL);
 	while (!ft_strchr(left, '\n'))
 	{
 		b_read = read(fd, buffer, BUFFER_SIZE);
 		if (b_read == -1)
-		{
-			free(left);
-			return (NULL);
-		}
+			return (ft_free(&left));
 		if (b_read == 0)
 			break ;
 		buffer[b_read] = '\0';
 		temp = ft_strjoin(left, buffer);
 		if (!temp)
-		{
-			free(left);
-			return (NULL);
-		}
+			return (ft_free(&left));
 		free(left);
 		left = temp;
 	}
 	return (left);
-}
-
-char	*fill_line(int fd, char *left)
-{
-	left = init_left(left);
-	if (!left)
-		return (NULL);
-	return (read_contact(fd, left));
 }
 
 char	*set_line(char *line)
@@ -78,25 +71,35 @@ char	*get_next_line(int fd)
 	char		*line;
 	char		*tmp;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= MAXINT)
+	if (BUFFER_SIZE <= 0 || BUFFER_SIZE >= MAXINT)
 		return (NULL);
 	stash = fill_line(fd, stash);
 	if (!stash)
 		return (NULL);
 	line = set_line(stash);
 	if (!line)
-	{
-		free(stash);
-		stash = NULL;
-		return (NULL);
-	}
+		return (ft_free(&stash));
 	tmp = stash;
 	stash = ft_strdup(stash + ft_strlen(line));
-	free(tmp);
 	if (!stash)
-	{
-		free(line);
-		return (NULL);
-	}
+		return (ft_free(&line));
+	free(tmp);
 	return (line);
 }
+/*
+#include <stdio.h>
+
+int main()
+{
+    //int fd = open("file1.txt", O_RDONLY);  // Ouvrir un fichier en lecture
+    char *line;
+
+    while ((line = get_next_line(0)) != NULL)
+	{
+        printf("%s", line);
+        free(line);
+    }
+    //close(fd);
+    return 0;
+}
+*/

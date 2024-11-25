@@ -1,45 +1,60 @@
-/*#include "get_next_line_bonus.h"
+/*
+#include "get_next_line_bonus.h"
 #include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 int main()
 {
-    const char *files[] = {"file1.txt", "file2.txt"};
-    
-    int fds[2];  // Tableau de descripteurs de fichier
+    //int fd = open("file1.txt", O_RDONLY);  // Ouvrir un fichier en lecture
     char *line;
+
+    while ((line = get_next_line(0)) != NULL) 
+	{
+        printf("%s", line);
+        free(line);
+    }
+    //close(fd);
+    return 0;
+}
+*/
+/*
+int main()
+{
+    const char *files[] = {"file1.txt", "file2.txt"};
+    int fd[2];  // Tableau de descripteurs de fichier
+    char *line1, *line2;
     size_t i;
 
-    // Ouvre tous les fichiers
-    for (i = 0; i < sizeof(files) / sizeof(files[0]); i++)
+    i = 0;
+    while (i < sizeof(files) / sizeof(files[0])) 
     {
-        fds[i] = open(files[i], O_RDONLY);
-        if (fds[i] < 0)
+        fd[i] = open(files[i], O_RDONLY);
+        if (fd[i] < 0) 
         {
             perror("Error opening file");
             return (1);
         }
+        i++;
     }
-
-    // Lecture des fichiers dans un ordre spécifique
-    printf("Reading from file1.txt\n");
-    while ((line = get_next_line(fds[0])) != NULL)
+    line1 = get_next_line(fd[0]);
+    line2 = get_next_line(fd[1]);
+    while (line1 || line2)
     {
-        printf("file1: %s", line);
-        free(line);
+        if (line1)
+        {
+            printf("file1: %s", line1);
+            free(line1);
+            line1 = get_next_line(fd[0]);
+        }
+        if (line2)
+        {
+            printf("file2: %s", line2);
+            free(line2);
+            line2 = get_next_line(fd[1]);
+        }
     }
-
-    printf("\nReading from file2.txt\n");
-    while ((line = get_next_line(fds[1])) != NULL)
-    {
-        printf("file2: %s", line);
-        free(line);
-    }
-    // Ferme tous les descripteurs de fichier
-    for (i = 0; i < sizeof(fds) / sizeof(fds[0]); i++)
-    {
-        close(fds[i]);
-    }
-
+    close(fd[0]);
+    close(fd[1]);
     return (0);
-}
-*/
+}*/
